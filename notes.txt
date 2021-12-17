@@ -1,0 +1,12 @@
+Stuff to restore:
+
+- error checking
+- till
+
+
+Tilling Stuff:
+
+4 blocks on each side of water
+9 blocks awa (inclusive) for every water block (max)
+	Modulus 9 is the upper limit
+	Minimum modulus 2 (1 water, 1 farmland)

@@ -1,0 +1,16 @@
+{
+    "name": "builder",
+    "description": "A 3D builder interface.",
+    "dependencies": {
+        "core": "*",
+        "shapes": "*"
+    },
+    "files": [
+        "builder.ts"
+    ],
+    "targetVersions": {
+        "target": "1.5.62",
+        "pxt": "6.4.32"
+    },
+    "icon": "https://pxt.azureedge.net/blob/f59d5d4c631f990587590be4e9362cba36a72a1f/static/libs/builder.png"
+}

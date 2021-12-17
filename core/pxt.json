@@ -1,0 +1,33 @@
+{
+    "name": "core",
+    "description": "The core minecraft library",
+    "dependencies": {},
+    "files": [
+        "README.md",
+        "pxt-core.d.ts",
+        "pxt-helpers.ts",
+        "pxt-python.d.ts",
+        "pxt-python-helpers.ts",
+        "sims.d.ts",
+        "enums.d.ts",
+        "constants.ts",
+        "helpers.ts",
+        "ns.ts",
+        "animalmob.jres",
+        "block.jres",
+        "coloredblock.jres",
+        "item.jres",
+        "monstermob.jres",
+        "effect.jres",
+        "player.ts",
+        "fieldeditors.ts",
+        "buffer.ts",
+        "agent.ts",
+        "mobs.ts"
+    ],
+    "public": true,
+    "targetVersions": {
+        "target": "1.5.62",
+        "pxt": "6.4.32"
+    }
+}
