@@ -1,18 +1,19 @@
+// Remove these when copying into minecraft
 import './custom';
 import './core/agent';
 import './core/buffer';
 import './core/constants';
-import './core/enums.d';
+import './core/enums';
 import './core/fieldeditors';
 import './core/helpers';
 import './core/mobs';
 import './core/ns';
 import './core/player';
-import './core/pxt-core.d';
+import './core/pxt-core';
 import './core/pxt-helpers';
 import './core/pxt-python-helpers';
-import './core/pxt-python.d';
-import './core/sims.d';
+import './core/pxt-python';
+import './core/sims';
 
 let autoCollect = AGENT_AUTO_COLLECT_DEFAULT;
 

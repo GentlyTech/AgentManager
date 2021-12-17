@@ -1,29 +1,69 @@
+// Remove these when copying into minecraft
 import './custom';
 import './core/agent';
 import './core/buffer';
 import './core/constants';
-import './core/enums.d';
+import './core/enums';
 import './core/fieldeditors';
 import './core/helpers';
 import './core/mobs';
 import './core/ns';
 import './core/player';
-import './core/pxt-core.d';
+import './core/pxt-core';
 import './core/pxt-helpers';
 import './core/pxt-python-helpers';
-import './core/pxt-python.d';
-import './core/sims.d';
+import './core/pxt-python';
+import './core/sims';
+
+interface commandsIndexSig {
+    [key: string]: Function
+}
 
 let autoCollect = AGENT_AUTO_COLLECT_DEFAULT;
+let lastMessage = "";
+const commands: commandsIndexSig = {
+    mv: mv,
+    turn: turn,
+    bring: bring,
+    tp: tp,
+    drill: drill,
+    drillTun: drillTun,
+    drillTunDown: drillTunDown,
+    drillTunUp: drillTunUp,
+    till: till,
+    place: place,
+    collect: collect,
+    purge: purge,
+}
 
 loops.forever(function() {
     if (autoCollect) {
         agent.collectAll();
     }
+
+    const message = player.message();
+    if (message != null) {
+        if (message != lastMessage) {
+            lastMessage = message;
+            const messageArray = message.split(" ");
+            const commandBase = messageArray[0];
+            const args = () => { 
+               messageArray.splice(0, 1);
+               return messageArray;
+            };
+            try {
+                commands[commandBase]({ ...args } as any);
+            }
+            catch {
+                functions.throwError("Unable to execute command");
+            }
+        }
+    }
+
     loops.pause(100);
 });
 
-player.onChat("mv", function(_, blocks) {
+function mv(blocks: number) {
     let direction = functions.stringToSixDirection(player.getChatArg(0));
 
     if (direction != null) {
@@ -32,9 +72,9 @@ player.onChat("mv", function(_, blocks) {
     else {
         functions.throwError("No movement direction specified.");
     }
-});
+}
 
-player.onChat("turn", function(_, times) {
+function turn(times: number) {
     let direction = functions.stringToTurnDirection(player.getChatArg(0));
 
     if (direction != null) {
@@ -45,18 +85,18 @@ player.onChat("turn", function(_, times) {
     else {
         functions.throwError("No turning direction specified.");
     }
-});
+}
 
-player.onChat("bring", function() {
+function bring() {
    agent.teleportToPlayer();
-});
+}
 
-player.onChat("tp", function(x, y, z) {
+function tp(x: number, y: number, z: number) {
     //let direction = sixToCompassDirection(stringToSixDirection(player.getChatArg(3)));
     agent.teleport(pos(x, y, z), NORTH);
-});
+}
 
-player.onChat("drill", function(_, blocks) {
+function drill(blocks: number) {
     let direction = functions.stringToSixDirection(player.getChatArg(0));
 
     if (direction != null) {
@@ -69,9 +109,9 @@ player.onChat("drill", function(_, blocks) {
     else {
         functions.throwError("No drilling direction specified.");
     }
-});
+}
 
-player.onChat("drilltun", function(_, blocks, upThenDown) {
+function drillTun(blocks: number, upThenDown: boolean) {
     let direction = functions.stringToSixDirection(player.getChatArg(0));
     let y_direction = upThenDown ? UP : DOWN;
 
@@ -90,9 +130,9 @@ player.onChat("drilltun", function(_, blocks, upThenDown) {
         functions.throwError("No drilling direction specified.");
     }
 
-});
+}
 
-player.onChat("drilltundown", function(_, blocks) {
+function drillTunDown(blocks: number) {
     let direction = functions.stringToSixDirection(player.getChatArg(0));
 
     if (direction != null) {
@@ -110,9 +150,9 @@ player.onChat("drilltundown", function(_, blocks) {
         functions.throwError("No drilling direction specified.");
     }
 
-});
+}
 
-player.onChat("drilltunup", function(_, blocks) {
+function drillTunUp(blocks: number) {
     let direction = functions.stringToSixDirection(player.getChatArg(0));
 
     if (direction != null) {
@@ -130,9 +170,9 @@ player.onChat("drilltunup", function(_, blocks) {
         functions.throwError("No drilling direction specified.");
     }
 
-});
+}
 
-player.onChat("till", function(length, width, doPlaceWater) {
+function till(length: number, width: number, doPlaceWater: boolean) {
     for (let l = 0; l < width; l++) {
         for (let w = 0; w < length; w++) {
             agent.move(FORWARD, 1);
@@ -160,9 +200,9 @@ player.onChat("till", function(length, width, doPlaceWater) {
         agent.move(BACK, length);
         agent.move(RIGHT, 1);
     }
-});
+}
 
-player.onChat("place", function(_, times, item_id) {
+function place(times: number, item_id: Item) {
     let direction = functions.stringToSixDirection(player.getChatArg(0));
 
     if (direction != null) {
@@ -176,14 +216,14 @@ player.onChat("place", function(_, times, item_id) {
     else {
         functions.throwError("No placement direction specified.");
     }    
-});
+}
 
-player.onChat("collect", function(shouldCollect) {
-    autoCollect = shouldCollect;
-});
+function collect(shouldCollect: boolean) {
+    autoCollect = shouldCollect ? 1 : 0;
+}
 
-player.onChat("purge", function() {
+function purge() {
     agent.dropAll(FORWARD);
-});
+}
 
 player.tell(mobs.target(LOCAL_PLAYER), "AgentManager Loaded");
